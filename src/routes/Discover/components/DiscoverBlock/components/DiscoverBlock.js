@@ -1,7 +1,9 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
-import DiscoverItem from "./DiscoverItem";
+
+import DiscoverItemList from "./DiscoverItemList";
+
 import "../styles/_discover-block.scss";
 
 function scrollContainer(id, { isNegative } = {}) {
@@ -13,9 +15,16 @@ function scrollContainer(id, { isNegative } = {}) {
   };
 }
 
-export default function DiscoverBlock({ text, id, data, errorMessage, imagesKey = "images" }) {
-  const { items, isLoading, isError } = data;
-
+export default function DiscoverBlock({
+  text,
+  id,
+  items,
+  isError,
+  isLoading,
+  isAllItemsLoaded,
+  errorMessage,
+  onClickNextItems,
+}) {
   return (
     <div className="discover-block">
       <div className="discover-block__header">
@@ -34,22 +43,20 @@ export default function DiscoverBlock({ text, id, data, errorMessage, imagesKey 
           </div>
         ) : null}
       </div>
-      <div
-        className="discover-block__row"
-        id={id}
-      >
-        {isLoading && <div>@matheusicaro LOADING...</div>}
-        {isError && <div>@matheusicaro ERROR.....: {errorMessage}</div>}
 
-        {items.map((item) => (
-          <DiscoverItem
-            key={item.name}
-            images={item.images}
-            name={item.name}
-          />
-        ))}
-      </div>
+      <DiscoverItemList
+        id={id}
+        items={items}
+        isError={isError}
+        isLoading={isLoading}
+        isAllItemsLoaded={isAllItemsLoaded}
+        errorMessage={errorMessage}
+        onClickNextItems={onClickNextItems}
+      />
     </div>
   );
 }
+
+
+
 
