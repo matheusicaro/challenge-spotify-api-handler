@@ -1,74 +1,37 @@
-import React, { Component } from "react";
-import DiscoverView from "./DiscoverView";
-import { apiService } from "../../../services/apis/spotify/spotify-api-service";
+import React from "react";
+import { useWeeklyReleases } from "../../../hooks/useWeeklyReleases";
+import DiscoverBlock from "./DiscoverBlock/components/DiscoverBlock";
+import "../styles/_discover.scss";
 
 import "../styles/_discover.scss";
 
-const initialState = () => ({
-  error: null,
-  isLoading: false,
-  items: [],
-});
+const Discover = () => {
+  const { items, isError, isLoading } = useWeeklyReleases();
 
-export default class Discover extends Component {
-  constructor() {
-    super();
-
-    this.state = {
-      newReleases: initialState(),
-      playlists: initialState(),
-      categories: initialState(),
-    };
-  }
-
-  async getNewReleases() {
-    this.setState((prevState) => ({
-      ...prevState,
-      newReleases: {
-        ...prevState.newReleases,
-        isLoading: true,
-        error: null,
-      },
-    }));
-
-    try {
-      const newReleases = await apiService.getNewReleases();
-
-      this.setState((prevState) => ({
-        ...prevState,
-        newReleases: {
-          ...prevState.newReleases,
-          items: newReleases,
-          error: null,
-          isLoading: false,
-        },
-      }));
-    } catch (error) {
-      this.setState((prevState) => ({
-        ...prevState,
-        newReleases: {
-          ...prevState.newReleases,
-          error: "Error on loading the new releases",
-          isLoading: false,
-        },
-      }));
-    }
-  }
-
-  componentDidMount() {
-    this.getNewReleases();
-  }
-
-  render() {
-    const { newReleases, playlists, categories } = this.state;
-
-    return (
-      <DiscoverView
-        newReleases={newReleases}
-        playlists={playlists}
-        categories={categories}
+  return (
+    <div className="discover">
+      <DiscoverBlock
+        text="RELEASED THIS WEEK"
+        id="released"
+        data={{ items, isError, isLoading }}
+        errorMessage="Something is bad on loading the releases of this week. Try again later or refresh the page"
       />
-    );
-  }
-}
+      <DiscoverBlock
+        text="FEATURED PLAYLISTS"
+        id="featured"
+        data={{ items, isError, isLoading }}
+        errorMessage="Something is bad on loading the featured playlists. Try again later or refresh the page"
+      />
+      <DiscoverBlock
+        text="BROWSE"
+        id="browse"
+        data={{ items, isError, isLoading }}
+        errorMessage="Something is bad on loading the browse. Try again later or refresh the page"
+        imagesKey="icons"
+      />
+    </div>
+  );
+};
+
+export default Discover;
 

@@ -1,5 +1,6 @@
 import axios from "axios";
 import qs from "qs";
+import { Buffer } from "buffer";
 
 import { Environment } from "../../../config";
 import { getNewReleasesFromData, getFeaturedPlaylistsFromData, getCategoriesFromData } from "./helpers";
@@ -28,7 +29,7 @@ class SpotifyApiService {
       method: "POST",
       url: this.apiAuthUrl,
       headers: {
-        Authorization: "Basic " + new Buffer.from(this.clientId + ":" + this.clientSecret).toString("base64"),
+        Authorization: "Basic " + Buffer.from(this.clientId + ":" + this.clientSecret).toString("base64"),
         "content-type": "application/x-www-form-urlencoded",
       },
       data: qs.stringify({ grant_type: "client_credentials" }),
@@ -93,3 +94,4 @@ class SpotifyApiService {
 }
 
 export const apiService = new SpotifyApiService();
+

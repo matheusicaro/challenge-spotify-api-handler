@@ -13,8 +13,8 @@ function scrollContainer(id, { isNegative } = {}) {
   };
 }
 
-export default function DiscoverBlock({ text, id, data, imagesKey = "images" }) {
-  const { error, items, isLoading } = data;
+export default function DiscoverBlock({ text, id, data, errorMessage, imagesKey = "images" }) {
+  const { items, isLoading, isError } = data;
 
   return (
     <div className="discover-block">
@@ -39,13 +39,13 @@ export default function DiscoverBlock({ text, id, data, imagesKey = "images" }) 
         id={id}
       >
         {isLoading && <div>@matheusicaro LOADING...</div>}
-        {error && <div>@matheusicaro ERROR.....: {error}</div>}
+        {isError && <div>@matheusicaro ERROR.....: {errorMessage}</div>}
 
-        {items.map(({ [imagesKey]: images, name }) => (
+        {items.map((item) => (
           <DiscoverItem
-            key={name}
-            images={images}
-            name={name}
+            key={item.name}
+            images={item.images}
+            name={item.name}
           />
         ))}
       </div>
