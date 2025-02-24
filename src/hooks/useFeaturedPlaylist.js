@@ -1,21 +1,21 @@
 import { useState, useEffect } from "react";
 import { apiService } from "../services/apis/spotify/spotify-api-service";
 
-export function useWeeklyReleases() {
-  const [newReleases, setNewReleases] = useState([]);
+export function useFeaturedPlaylist() {
+  const [featuredPlaylist, setFeaturedPlaylist] = useState([]);
   const [nextItemsUrl, setNextItemsUrl] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
 
-  const fetchNewReleases = async () => {
+  const fetchFeaturedPlaylist = async () => {
     try {
-      const data = await apiService.getNewReleases();
+      const data = await apiService.getFeaturedPlaylists();
 
-      setNewReleases((prev) => [...prev, ...data.items]);
+      setFeaturedPlaylist((prev) => [...prev, ...data.items]);
       setNextItemsUrl(data.nextItemsUrl);
     } catch (error) {
       if (error.status === 404) {
-        setNewReleases([]);
+        setFeaturedPlaylist([]);
       } else {
         setIsError(true);
       }
@@ -24,21 +24,21 @@ export function useWeeklyReleases() {
     }
   };
 
-  useEffect(() => {
-    fetchNewReleases();
-
-    return () => {
-      setNewReleases([]);
-    };
-  }, []);
-
   const loadNextItems = async () => {
     if (nextItemsUrl && !isLoading) {
       setIsLoading(true);
 
-      await fetchNewReleases(nextItemsUrl);
+      await fetchFeaturedPlaylist(nextItemsUrl);
     }
   };
 
-  return { items: newReleases, isLoading, isError, loadNextItems, isAllItemsLoaded: !nextItemsUrl };
+  useEffect(() => {
+    fetchFeaturedPlaylist();
+
+    return () => {
+      setFeaturedPlaylist([]);
+    };
+  }, []);
+
+  return { items: featuredPlaylist, isLoading, isError, loadNextItems, isAllItemsLoaded: !nextItemsUrl };
 }

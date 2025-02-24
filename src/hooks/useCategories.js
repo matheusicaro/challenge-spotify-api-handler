@@ -1,21 +1,20 @@
 import { useState, useEffect } from "react";
 import { apiService } from "../services/apis/spotify/spotify-api-service";
 
-export function useWeeklyReleases() {
-  const [newReleases, setNewReleases] = useState([]);
+export function useCategories() {
+  const [categories, setCategories] = useState([]);
   const [nextItemsUrl, setNextItemsUrl] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
 
-  const fetchNewReleases = async () => {
+  const fetchCategories = async (optionalNextItemsUrl) => {
     try {
-      const data = await apiService.getNewReleases();
-
-      setNewReleases((prev) => [...prev, ...data.items]);
+      const data = await apiService.getCategories(optionalNextItemsUrl);
+      setCategories((prev) => [...prev, ...data.items]);
       setNextItemsUrl(data.nextItemsUrl);
     } catch (error) {
       if (error.status === 404) {
-        setNewReleases([]);
+        setCategories([]);
       } else {
         setIsError(true);
       }
@@ -24,21 +23,21 @@ export function useWeeklyReleases() {
     }
   };
 
-  useEffect(() => {
-    fetchNewReleases();
-
-    return () => {
-      setNewReleases([]);
-    };
-  }, []);
-
   const loadNextItems = async () => {
     if (nextItemsUrl && !isLoading) {
       setIsLoading(true);
 
-      await fetchNewReleases(nextItemsUrl);
+      await fetchCategories(nextItemsUrl);
     }
   };
 
-  return { items: newReleases, isLoading, isError, loadNextItems, isAllItemsLoaded: !nextItemsUrl };
+  useEffect(() => {
+    fetchCategories();
+
+    return () => {
+      setCategories([]);
+    };
+  }, []);
+
+  return { items: categories, isLoading, isError, loadNextItems, isAllItemsLoaded: !nextItemsUrl };
 }
