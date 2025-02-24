@@ -51,7 +51,7 @@ class SpotifyApiService {
 
     const response = await axios({
       method: "GET",
-      url: `${this.baseUrl}/new-releases`,
+      url: `${this.apiBaseUrl}/new-releases`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -66,7 +66,7 @@ class SpotifyApiService {
 
     const response = await axios({
       method: "GET",
-      url: `${this.baseUrl}/featured-playlists`,
+      url: `${this.apiBaseUrl}/featured-playlists`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -81,7 +81,7 @@ class SpotifyApiService {
 
     const response = await axios({
       method: "GET",
-      url: `${this.baseUrl}/categories`,
+      url: `${this.apiBaseUrl}/categories`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -92,5 +92,4 @@ class SpotifyApiService {
   }
 }
 
-export const { getNewReleases, getFeaturedPlaylists } = new SpotifyApiService();
-
+export const apiService = new SpotifyApiService();
