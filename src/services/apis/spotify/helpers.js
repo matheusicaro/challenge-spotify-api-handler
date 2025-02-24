@@ -1,13 +1,17 @@
 /**
- * The Spotify API has the same pattern for fetch answers like New Releases, Featured Playlists,
+ * The Spotify API has the same pattern for fetch answers like New Releases, Featured Playlists
  */
-const getMappedData = (data) => {
-  return data.items.map((item) => ({
-    name: item.name,
-    images: item.images.map((image) => ({
-      url: image.url,
+const getNameAndImagesUrl = (data) => {
+  return {
+    nextItemsUrl: data.next,
+    items: data.items.map((item) => ({
+      name: item.name,
+      href: item.external_urls.spotify,
+      images: item.images.map((image) => ({
+        url: image.url,
+      })),
     })),
-  }));
+  };
 };
 
 /**
@@ -30,7 +34,7 @@ const getMappedData = (data) => {
  * ]
  * ```
  */
-export const getNewReleasesFromData = (data) => getMappedData(data.albums);
+export const getNewReleasesFromData = (data) => getNameAndImagesUrl(data.albums);
 
 /**
  * Function to return the new featured playlist mapped from the Spotify API response.
@@ -52,7 +56,7 @@ export const getNewReleasesFromData = (data) => getMappedData(data.albums);
  * ]
  * ```
  */
-export const getFeaturedPlaylistsFromData = (data) => getMappedData(data.playlists);
+export const getFeaturedPlaylistsFromData = (data) => getNameAndImagesUrl(data.playlists);
 
 /**
  * Function to return the new featured playlist mapped from the Spotify API response.
@@ -74,5 +78,15 @@ export const getFeaturedPlaylistsFromData = (data) => getMappedData(data.playlis
  * ]
  * ```
  */
-export const getCategoriesFromData = (data) => getMappedData(data.categories);
-
+export const getCategoriesFromData = (data) => {
+  return {
+    nextItemsUrl: data.categories.next,
+    items: data.categories.items.map((item) => ({
+      name: item.name,
+      href: item.href,
+      images: item.icons.map((icon) => ({
+        url: icon.url,
+      })),
+    })),
+  };
+};

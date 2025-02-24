@@ -47,51 +47,42 @@ class SpotifyApiService {
     throw new Error(`Error on getting spotify api token, status code received: ${statusCode}`);
   }
 
-  async getNewReleases() {
+  async getData(url) {
     const token = await this.getAuthorizationToken();
 
-    const response = await axios({
+    return axios({
       method: "GET",
-      url: `${this.apiBaseUrl}/new-releases`,
+      url,
       headers: {
         Authorization: `Bearer ${token}`,
       },
       responseType: "json",
     });
+  }
+
+  async getNewReleases(optionalNextItemsUrl) {
+    const defaultUrl = `${this.apiBaseUrl}/new-releases`;
+
+    const response = await this.getData(optionalNextItemsUrl || defaultUrl);
 
     return getNewReleasesFromData(response.data);
   }
 
-  async getFeaturedPlaylists() {
-    const token = await this.getAuthorizationToken();
+  async getFeaturedPlaylists(optionalNextItemsUrl) {
+    const defaultUrl = `${this.apiBaseUrl}/featured-playlists`;
 
-    const response = await axios({
-      method: "GET",
-      url: `${this.apiBaseUrl}/featured-playlists`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      responseType: "json",
-    });
+    const response = await this.getData(optionalNextItemsUrl || defaultUrl);
 
     return getFeaturedPlaylistsFromData(response.data);
   }
 
-  async getCategories() {
-    const token = await this.getAuthorizationToken();
+  async getCategories(optionalNextItemsUrl) {
+    const defaultUrl = `${this.apiBaseUrl}/categories`;
 
-    const response = await axios({
-      method: "GET",
-      url: `${this.apiBaseUrl}/categories`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      responseType: "json",
-    });
+    const response = await this.getData(optionalNextItemsUrl || defaultUrl);
 
     return getCategoriesFromData(response.data);
   }
 }
 
 export const apiService = new SpotifyApiService();
-
