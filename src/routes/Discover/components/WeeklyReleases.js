@@ -4,7 +4,7 @@ import DiscoverBlock from "./DiscoverBlock/components/DiscoverBlock";
 import "../styles/_discover.scss";
 
 const WeeklyReleases = () => {
-  const { items, isError, isLoading, onClickNextItems, isAllItemsLoaded } = useWeeklyReleases();
+  const { items, isError, isLoading, isAllItemsLoaded, loadNextItems } = useWeeklyReleases();
 
   return (
     <DiscoverBlock
@@ -14,11 +14,10 @@ const WeeklyReleases = () => {
       items={items}
       isError={isError}
       isLoading={isLoading}
-      onClickNextItems={onClickNextItems}
+      onClickNextItems={loadNextItems}
       isAllItemsLoaded={isAllItemsLoaded}
     />
   );
 };
 
 export default WeeklyReleases;
-

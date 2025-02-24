@@ -24,9 +24,9 @@ export default function DiscoverItemList({
       className="discover-block__row"
       id={id}
     >
-      {items.map((item) => (
+      {items.map((item, index) => (
         <DiscoverItem
-          key={item.name}
+          key={`${index}${item.name}`}
           images={item.images}
           name={item.name}
           href={item.href}
@@ -47,7 +47,7 @@ export default function DiscoverItemList({
 
       {notFoundData && (
         <Box sx={{ display: "flex", height: "fit-content" }}>
-          <p>Not found data for this user 😢</p>
+          <p>Not found data for your user 😢</p>
         </Box>
       )}
 
@@ -60,4 +60,3 @@ export default function DiscoverItemList({
     </div>
   );
 }
-

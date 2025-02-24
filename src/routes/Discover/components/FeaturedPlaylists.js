@@ -4,21 +4,20 @@ import DiscoverBlock from "./DiscoverBlock/components/DiscoverBlock";
 import "../styles/_discover.scss";
 
 const FeaturedPlaylists = () => {
-  const { items, isError, isLoading, onClickNextItems, isAllItemsLoaded } = useFeaturedPlaylist();
+  const { items, isError, isLoading, isAllItemsLoaded, loadNextItems } = useFeaturedPlaylist();
 
   return (
     <DiscoverBlock
       text="FEATURED PLAYLISTS"
-      id="released"
+      id="featured"
+      errorMessage="Something is bad on loading the featured playlists. Try again later or refresh the page"
       items={items}
       isError={isError}
       isLoading={isLoading}
-      onClickNextItems={onClickNextItems}
       isAllItemsLoaded={isAllItemsLoaded}
-      errorMessage="Something is bad on loading the releases of this week. Try again later or refresh the page"
+      onClickNextItems={loadNextItems}
     />
   );
 };
 
 export default FeaturedPlaylists;
-
